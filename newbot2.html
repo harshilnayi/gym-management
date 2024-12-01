@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitZone AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #33383b;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            overflow: hidden;
+            background-color: burlywood;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 30px;
+            padding-bottom: 20px;
+            margin-top: 8px;
+            border-radius: 1px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+        }
+
+        .header .h1 {
+            font-style: bold;
+            font-size: 50px;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            
+        }
+
+        .header a {
+            float: left;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 0px;
+            text-decoration: none;
+            font-size: 20px; 
+            font-style: bold;
+            line-height: 25px;
+            border-radius: 4px;
+        }
+
+        .header a.logo {
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .header a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .header a.active {
+            background-color: rgb(233, 173, 7);
+            color: white;
+            margin-right: 25px;
+        }
+
+        .header-right {
+            float: right;
+        }
+
+        #chat-container {
+            width: 70%;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 0px 10px 0px #888888;
+            margin-bottom: 500px; /* Add some space */
+            margin-top: 150px; /* Adjust as needed */
+            position: relative;
+            z-index: 1;
+        }
+
+        #chat-container h1 {
+            text-align: center;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        #chat-area {
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            max-width: 70%;
+        }
+
+        .user {
+            background-color: #000;
+            color: white;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .bot {
+            background-color: burlywood;
+            color: black;
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ccc; /* Add border */
+            border-radius: 5px; /* Add border radius */
+            font-size: 16px;
+            margin: 0 auto; /* Center the input box */
+            display: block; /* Display as block element */
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button.back {
+            margin-top: 10px;
+            width: 200px;
+        }
+
+        .footer-distributed {
+            background: burlywood;
+            box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+            box-sizing: border-box;
+            width: 100%;
+            text-align: left;
+            font: bold 16px sans-serif;
+            padding: 55px 50px;
+            margin-top: auto;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .footer-distributed .footer-left,
+        .footer-distributed .footer-center,
+        .footer-distributed .footer-right {
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .footer-distributed .footer-left {
+            width: 40%;
+        }
+
+        .footer-distributed h3 {
+            color:  black;
+            font: normal 36px 'Open Sans', cursive;
+            margin: 0;
+        }
+
+        .footer-distributed h3 span {
+            color:  darkblue;
+        }
+
+        .footer-distributed .footer-links {
+            color:  black;
+            margin: 20px 0 12px;
+            padding: 0;
+        }
+
+        .footer-distributed .footer-links a {
+            display:inline-block;
+            line-height: 1.8;
+            font-weight:400;
+            text-decoration: none;
+            color:  inherit;
+        }
+
+        .footer-distributed .footer-company-name {
+            color:  #222;
+            font-size: 14px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .footer-distributed .footer-center {
+            width: 35%;
+        }
+
+        .footer-distributed .footer-center i {
+            background-color:  #33383b;
+            color: white;
+            font-size: 25px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 42px;
+            margin: 10px 15px;
+            vertical-align: middle;
+        }
+
+        .footer-distributed .footer-center i.fa-envelope {
+            font-size: 17px;
+            line-height: 38px;
+        }
+
+        .footer-distributed .footer-center p {
+            display: inline-block;
+            color: black;
+            font-weight:400;
+            vertical-align: middle;
+            margin:0;
+        }
+
+        .footer-distributed .footer-center p span {
+            display:block;
+            font-weight: normal;
+            font-size:14px;
+            line-height:2;
+        }
+
+        .footer-distributed .footer-center p a {
+            color: darkblue;
+            text-decoration: none;;
+        }
+
+        .footer-distributed .footer-links a:before {
+            content: "|";
+            font-weight:300;
+            font-size: 20px;
+            left: 0;
+            color: black;
+            display: inline-block;
+            padding-right: 5px;
+        }
+
+        .footer-distributed .footer-links .link-1:before {
+            content: none;
+        }
+
+        .footer-distributed .footer-right {
+            width: 20%;
+        }
+
+        .footer-distributed .footer-company-about {
+            line-height: 20px;
+            color:  darkblue;
+            font-size: 13px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .footer-distributed .footer-company-about span {
+            display: block;
+            color:  black;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .footer-distributed .footer-icons {
+            margin-top: 25px;
+        }
+
+        .footer-distributed .footer-icons a {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background-color:  #33383b;
+            border-radius: 2px;
+
+            font-size: 20px;
+            color: white;
+            text-align: center;
+            line-height: 35px;
+
+            margin-right: 3px;
+            margin-bottom: 5px;
+        }
+
+        /* If you don't want the footer to be responsive, remove these media queries */
+
+        @media (max-width: 880px) {
+
+            .footer-distributed {
+                font: bold 14px sans-serif;
+            }
+
+            .footer-distributed .footer-left,
+            .footer-distributed .footer-center,
+            .footer-distributed .footer-right {
+                display: block;
+                width: 100%;
+                margin-bottom: 40px;
+                text-align: center;
+            }
+
+            .footer-distributed .footer-center i {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="Home.html" class="h1">Fit Zone&#128170;</a>
+    <div class="header-right">
+        <a class="active" href="Home.html">Home</a>
+    </div>
+</div>
+
+<div id="chat-container">
+    <h1>FitZone AI</h1>
+    <div id="chat-area"></div>
+    <input type="text" id="user-input" placeholder="Type your message...">
+</div>
+
+<footer class="footer-distributed">
+    <div class="footer-left">
+        <h3>FitZone<span>The Gym</span></h3>
+        <p class="footer-links">
+            <a href="#" class="link-1">Home</a>
+            <a href="#">Blog</a>
+            <a href="#">Pricing</a>
+            <a href="#">About</a>
+            <a href="#">Faq</a>
+            <a href="#">Contact</a>
+        </p>
+        <p class="footer-company-name">FitZone-The Gym © 2023</p>
+    </div>
+    <div class="footer-center">
+        <div>
+            <i class="fa fa-map-marker"></i>
+            <p><span>Kudasan Road</span>Gandhinagar , Gujarat</p>
+        </div>
+        <div>
+            <i class="fa fa-phone"></i>
+            <p>+91 84014 91067</p>
+        </div>
+        <div>
+            <i class="fa fa-envelope"></i>
+            <p><a href="Home.html">FitZone-TheGym@company.com</a></p>
+        </div>
+    </div>
+    <div class="footer-right">
+        <p class="footer-company-about">
+            <span>About the company</span>
+            Join Us For Your Daily Body Routine.
+        </p>
+        <div class="footer-icons">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-github"></i></a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const pairs = [
+        [/(hello|hi|hey)/i, ['Hey! Welcome to FitZone. How can I help you today?']],
+        [/(services|your services\?)/i, ['cardio , body building , Zumba , Strength Training , Yoga']],
+        [/(my weight is 100kg)/i, ['You should try some cardio today!', 'How about some strength training?', 'You should try some Zumba today!', 'You should try some Body Building today!', 'You should try some Yoga today!']],
+        [/(any advice)/i, ['Remember to stay hydrated during your workouts!', 'Consistency is key to seeing results.']],
+        [/(motivation)/i, ['it is hard to beat a person who never gives up!']],
+        [/(thanks bye|bye)/i, [' Bye, see you tommorow!']],
+    ];
+
+    const chatArea = document.getElementById('chat-area');
+    const userInput = document.getElementById('user-input');
+
+    function sendMessage() {
+        const userMessage = userInput.value;
+        userInput.value = '';
+
+        const response = getResponse(userMessage);
+        displayMessage(userMessage, 'user');
+        displayMessage(response, 'bot');
+    }
+
+    function getResponse(message) {
+        for (const [pattern, responses] of pairs) {
+            if (pattern.test(message)) {
+                const randomIndex = Math.floor(Math.random() * responses.length);
+                return responses[randomIndex];
+            }
+        }
+        return "I'm sorry, I didn't understand that.";
+    }
+
+    function displayMessage(message, sender) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender);
+        messageElement.innerText = message;
+        chatArea.appendChild(messageElement);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    // Send message when pressing Enter key
+    userInput.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
